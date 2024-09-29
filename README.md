@@ -16,7 +16,8 @@ Welcome to the **House Price Prediction Project**! This repository is designed t
     - *[Version 4](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%204)* : New model approach
     - *[Version 5](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%205)* : Hyperparameter tuning
     - *[Version 6](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%206)* : Advanced modeling
-    - *[Version 7](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%207)* : Final model version
+    - *[Version 7](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%207)* : Model testing
+    - *[Version 8](https://github.com/senithu-perera/CompInno.github.io/tree/main/Version%207)* : Final model version with multiple datasets
   
 ## How to Use This Repository
 
