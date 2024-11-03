@@ -5,7 +5,6 @@ import pickle
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
-from fastapi import BackgroundTasks
 from fastapi.responses import FileResponse
 import os
 
