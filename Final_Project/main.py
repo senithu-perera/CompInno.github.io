@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 import os
+import requests
 
 app = FastAPI()
 
@@ -66,7 +67,7 @@ class ClusterData(BaseModel):
     Lattitude: float
     Longtitude: float
 
-@app.post("/predict")
+@app.post("/predict") # the endpoint for predicting the price
 async def predict_price(house_data: HouseData):
     # Convert incoming data into a DataFrame
     data = {
@@ -87,32 +88,32 @@ async def predict_price(house_data: HouseData):
 
     new_data_df = pd.DataFrame(data)
     
-    new_data_df = pd.get_dummies(new_data_df, columns=['Suburb', 'Date', 'CouncilArea', 'Regionname'])
+    new_data_df = pd.get_dummies(new_data_df, columns=['Suburb', 'Date', 'CouncilArea', 'Regionname']) # One-hot encode the categorical columns
 
-    missing_cols = list(set(X_columns) - set(new_data_df.columns))
-    new_data_df = pd.concat([new_data_df, pd.DataFrame(0, index=new_data_df.index, columns=missing_cols)], axis=1)
+    missing_cols = list(set(X_columns) - set(new_data_df.columns)) # Identify the missing columns
+    new_data_df = pd.concat([new_data_df, pd.DataFrame(0, index=new_data_df.index, columns=missing_cols)], axis=1) # Add the missing columns with value 0
 
-    new_data_df = new_data_df[X_columns]
+    new_data_df = new_data_df[X_columns] 
 
-    new_data_scaled = scaler.transform(new_data_df)
+    new_data_scaled = scaler.transform(new_data_df) # Scale the data
 
-    predicted_price = model.predict(new_data_scaled)
+    predicted_price = model.predict(new_data_scaled) # Make the prediction
 
     return {"predicted_price": predicted_price[0]}
 
-@app.exception_handler(HTTPException)
+@app.exception_handler(HTTPException) # Handle exceptions
 async def http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail, "error": "An error occurred"}
     )
 
-@app.get("/get-csv")
+@app.get("/get-csv") # the endpoint for loading the CSV file
 async def get_csv():
     file_path = os.path.join("database", "csv2.csv")
     return FileResponse(file_path, media_type="text/csv", filename="csv2.csv")
 
-# Define the endpoint for clustering
+# the endpoint for clustering
 @app.post("/predict-cluster")
 async def predict_cluster(cluster_data: ClusterData):
     input_df = pd.DataFrame([cluster_data.model_dump()])
